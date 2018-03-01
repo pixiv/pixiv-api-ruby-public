@@ -1,5 +1,6 @@
 require 'active_support/core_ext/array/extract_options'
 require 'active_support/core_ext/hash/deep_merge'
+require_relative 'pixiv_api/faraday'
 
 module PixivApi
   autoload :VERSION, 'pixiv_api/version'

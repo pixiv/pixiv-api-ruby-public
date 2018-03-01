@@ -1,6 +1,8 @@
 require 'forwardable'
 require 'oauth2'
 
+require_relative 'faraday'
+
 module PixivApi
   class Client
     class UnsupportedApiError < NotImplementedError; end
@@ -8,6 +10,7 @@ module PixivApi
     extend Forwardable
 
     include Request::FavoriteUsers
+
     include Request::Util
 
     attr_reader :client, :access_token
@@ -24,7 +27,8 @@ module PixivApi
       @client = OAuth2::Client.new(*client_configuration) do |builder|
         builder.request :multipart
         builder.request :url_encoded
-        builder.adapter Faraday.default_adapter
+        builder.request :user_agent, PixivApi.configuration.user_agent
+        builder.adapter ::Faraday.default_adapter
       end
 
       @access_token = OAuth2::AccessToken.from_hash(client, token_hash)

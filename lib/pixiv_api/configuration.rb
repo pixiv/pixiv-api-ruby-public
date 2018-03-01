@@ -11,6 +11,7 @@ module PixivApi
 
     OPTIONAL_KEYS = %i(
       cache_dir
+      user_agent
     )
 
     (REQUIRED_KEYS + OPTIONAL_KEYS).each do |key|
@@ -21,6 +22,14 @@ module PixivApi
 
     def cache_dir
       self[:cache_dir] || Dir.mktmpdir('pixiv-api')
+    end
+
+    def user_agent
+      if self[:user_agent]
+        "#{self[:user_agent]} (#{PixivApi::Faraday::Request::UserAgent::DEFAULT_USER_AGENT})"
+      else
+        PixivApi::Faraday::Request::UserAgent::DEFAULT_USER_AGENT
+      end
     end
 
     def []=(key, value)
